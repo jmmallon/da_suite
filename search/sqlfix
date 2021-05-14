@@ -1,0 +1,2 @@
+#!/bin/sh
+tr '\000' '{' < songlist.sql | sed -e 's/{00/200/g' -e 's/{99/199/g' | sed "s/{[^']*//" | mysql

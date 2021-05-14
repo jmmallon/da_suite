@@ -1,0 +1,8 @@
+AuthUserFile /home/jmmallon/public_html/radio/search/admin/.htpass
+AuthGroupFile /dev/null
+AuthName ByPassword
+AuthType Basic
+
+<Limit GET>
+require user d3l1c10u5
+</Limit>
