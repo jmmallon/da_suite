@@ -1,6 +1,8 @@
 # Delicious Agony Tool Suite
-## Search Engine
+## Search Engine/Playlist Builder
 Shows the contents of the Delicious Agony library and creates playlists for Delicious Agony shows
+## Live
+Mark songs as live, indvidually or by album
 ## Library
 Shows recent additions to the Delicious Agony library
 ## Playlist
