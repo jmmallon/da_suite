@@ -2,7 +2,7 @@
 ## Search Engine/Playlist Builder
 Shows the contents of the Delicious Agony library and creates playlists for Delicious Agony shows
 ## Live
-Mark songs as live, indvidually or by album
+Mark songs as live, individually or by album
 ## Library
 Shows recent additions to the Delicious Agony library
 ## Playlist
