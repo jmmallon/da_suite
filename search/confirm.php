@@ -22,7 +22,7 @@
   $print_pre = "<pre>";
   $print_list = "<pre>";
   foreach ($songs as $id) {
-    $query_string = "select * from $table where id=$id";
+    $query_string = "select * from $table where id='$id'";
     $result_id = mysqli_query($mysql, $query_string);
     while ($row = mysqli_fetch_array($result_id, MYSQLI_ASSOC)) {
       $row_count++;
@@ -34,7 +34,7 @@
       $song = str_replace($db,$display,$row['song']);
       $album = str_replace($db,$display,$row['album']);
       $year = ($row['year'] == 0) ? "" : $row['year'];
-      $filename = str_replace($db,$display,str_replace("%%","\\",substr($row['filename'], 2)));
+      $filename = str_replace($db,$display,str_replace("%%","\\",str_replace("J:","",$row['filename'])));
       $link = find_band_link($artist);
       if (! strpos($link, "http")) {
       	$link = "";

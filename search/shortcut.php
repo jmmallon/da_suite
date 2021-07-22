@@ -73,6 +73,7 @@ $decade_select
 </td><td width=5></td><td>
 <input type=text name='${abbreviation}text' size=20>
 <input type=submit name='submit' value='${abbreviation} Song'>
+<input type=submit name='submit' value='${abbreviation} Live'>
 </td></tr>
 </table>
 </form>

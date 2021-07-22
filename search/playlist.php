@@ -21,7 +21,7 @@ Playlist cleared.
   // print_r($songs);
   if ($songs[0]) {
    foreach ($songs as $songid) {
-    $query_string = "select * from $table where id=$songid";
+    $query_string = "select * from $table where id='$songid'";
     $result_id = mysqli_query($mysql, $query_string);
     while ($row = mysqli_fetch_array($result_id, MYSQLI_ASSOC)) {
       $length = intval($row['length']/60) . ":" . sprintf("%02d",$row['length'] % 60);
@@ -52,7 +52,7 @@ Playlist cleared.
       $album = ($album) ? $album : '-';
       $hasid = "";
       if (array_key_exists($artist,$ids)) { $hasid = "*"; }
-      $filename = str_replace($db,$display,str_replace("%%","\\",substr($row['filename'], 2)));
+      $filename = str_replace($db,$display,str_replace("%%","\\",str_replace("J:","",$row['filename'])));
       $year = ($row['year'] == 0) ? "-" : $row['year'];
 //<a href='#' title='delete' class='itemDelete'>x</a> &nbsp; $artist - $song ($album) - $year - $length
       $print_html .= "<li id='$songid'>

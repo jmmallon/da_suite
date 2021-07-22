@@ -227,6 +227,7 @@ $decade_select
 </td><td width=5></td><td>
 <input type=text name='${abbreviation}text' size=20>
 <input type=submit name='submit' value='${abbreviation} Song'>
+<input type=submit name='submit' value='${abbreviation} Live'>
 </td></tr>
 ";
 }
@@ -311,6 +312,7 @@ Decade <select name=TGAdecade>
 </td><td width=5></td><td>
 <input type=text name="TGAtext" size=20>
 <input type=submit name="submit" value="TGA Song">
+<input type=submit name="submit" value="TGA Live">
 </td></tr>
 
 </table>

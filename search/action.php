@@ -30,6 +30,7 @@
         $urlalbum = urlencode($row['album']);
         $urlartist = urlencode($row['artist']);
         $year = ($row['year'] == 0) ? "" : $row['year'];
+        $live = ($row['live'] == 1) ? "*" : "";
         $track = ($row['track'] == 0) ? "" : $row['track'];
         $bitrate = $row['bitrate'] . " kbps";
 	$link = find_band_link($artist);
@@ -39,7 +40,7 @@
 	}
       	if ($showid) {
         	$fullfilename = str_replace($db,$display,$row['filename']);
-		$names = explode("%", $fullfilename);
+		$names = explode("/", $fullfilename);
 		$filename = array_pop($names);
 		$idnames = $idfiles[$filename];
 		asort($idnames);
@@ -64,6 +65,10 @@
 <td></td>
 <td align=center valign=top>
 $hasid
+</td>
+<td></td>
+<td align=center valign=top>
+$live
 </td>
 ";
       }	
@@ -124,7 +129,7 @@ $link
       }
       $totallength = sprintf("%02d",intval($totallength/3600)) . ":" . sprintf("%02d",intval(($totallength % 3600)/60)) . ":" . sprintf("%02d",$totallength % 60);
       list ($type, $desc) = explode(":",$_SESSION['sort']);
-      $fields = array('artist', 'song', 'track', 'album', 'year', 'length', 'bitrate', 'date');
+      $fields = array('artist', 'song', 'track', 'album', 'year', 'length', 'bitrate', 'date','live');
       $second = array();
       $second['artist'] = '';
       $second['song'] = 'year';
@@ -132,6 +137,7 @@ $link
       $second['album'] = 'artist';
       $second['length'] = 'year,artist,album';
       $second['bitrate'] = 'artist,year,album';
+      $second['live'] = 'artist,year,album,track';
       $second['year'] = 'artist,album';
       $second['date'] = 'artist,album';
       foreach ($fields as $field) {
@@ -148,6 +154,7 @@ ENDLINE;
       print '<th><a href="action.php?action=reorder&' . $order['artist'] . '">Artist</a></th><td width=10></td>' . "\n";
       if (! $showid) {
         print '<th>Has ID?</th><td width=10></td>';
+        print '<th><a href="action.php?action=reorder&' . $order['live'] . '">Live</a></th> <td width=10></td>' . "\n";
       }
       print '<th><a href="action.php?action=reorder&' . $order['song'] . '">Song</a></th> <td width=10></td>' . "\n";
       if (! $showid) {
@@ -267,6 +274,9 @@ ENDLINE;
             $title = $_POST['SOPtext'];
 	    $words = explode('|', trim($_POST['SOPlist']));
             break;
+    	case 'SOP Live':
+	    $words = explode('|', trim($_POST['SOPlist']));
+            break;
     	case 'SSP':
       	    $artist = (trim($_GET['SSP'])) ? trim($_GET['SSP']) : trim($_POST['SSP']);
       	    break;
@@ -294,6 +304,9 @@ ENDLINE;
             $title = $_POST['SSPtext'];
 	    $words = explode('|', trim($_POST['SSPlist']));
             break;
+    	case 'SSP Live':
+	    $words = explode('|', trim($_POST['SSPlist']));
+            break;
     	case 'UT':
       	    $artist = (trim($_GET['UT'])) ? trim($_GET['UT']) : trim($_POST['UT']);
       	    break;
@@ -319,6 +332,9 @@ ENDLINE;
             break;
     	case 'UT Song':
             $title = $_POST['UTtext'];
+	    $words = explode('|', trim($_POST['UTlist']));
+            break;
+    	case 'UT Live':
 	    $words = explode('|', trim($_POST['UTlist']));
             break;
     	case 'TGA':
@@ -351,6 +367,9 @@ ENDLINE;
             $title = $_POST['TGAtext'];
 	    $words = explode('|', trim($_POST['TGAlist']));
             break;
+    	case 'TGA Live':
+	    $words = explode('|', trim($_POST['TGAlist']));
+            break;
     	case 'FOH':
       	    $artist = (trim($_GET['FOH'])) ? trim($_GET['FOH']) : trim($_POST['FOH']);
       	    break;
@@ -376,6 +395,9 @@ ENDLINE;
             break;
     	case 'FOH Song':
             $title = $_POST['FOHtext'];
+	    $words = explode('|', trim($_POST['FOHlist']));
+            break;
+    	case 'FOH Live':
 	    $words = explode('|', trim($_POST['FOHlist']));
             break;
     	case 'SP':
@@ -405,6 +427,9 @@ ENDLINE;
             $title = $_POST['SPtext'];
 	    $words = explode('|', trim($_POST['SPlist']));
             break;
+    	case 'SP Live':
+	    $words = explode('|', trim($_POST['SPlist']));
+            break;
     	case 'ER':
       	    $artist = (trim($_GET['ER'])) ? trim($_GET['ER']) : trim($_POST['ER']);
       	    break;
@@ -430,6 +455,9 @@ ENDLINE;
             break;
     	case 'ER Song':
             $title = $_POST['ERtext'];
+	    $words = explode('|', trim($_POST['ERlist']));
+            break;
+    	case 'ER Live':
 	    $words = explode('|', trim($_POST['ERlist']));
             break;
       }
@@ -480,6 +508,14 @@ ENDLINE;
 	$like_string = implode(' or ', $string);
         print_results("select * from $table where $yearquery (song like '%$title%' or album like '%$title%') and ($like_string) order by artist,album,track");
       }
+      elseif (preg_match('/ Live/', $show)) {
+        $string = array();
+  	foreach ($words as $word) {
+      	    array_push($string,"artist like '$word%'");
+	}
+	$like_string = implode(' or ', $string);
+        print_results("select * from $table where live = 1 and ($like_string) order by artist,album,track");
+      }
       elseif ($show != 'Interviews' && ! preg_match('/ IDs/', $show)) {
       	print_results("select * from $table where $yearquery (artist like '$artist%' or artist like 'the $artist%') order by artist,year,album,track,song");
       }
@@ -491,8 +527,7 @@ ENDLINE;
 	$string = array();
 	$artists = array();
   	foreach ($songs as $song) {
-	  if (is_numeric($song)) {
-    	    $query_string = "select artist from $table where id=$song";
+    	    $query_string = "select artist from $table where id='$song'";
     	    $result_id = mysqli_query($mysql, $query_string);
     	    $row_num = mysqli_num_rows($result_id);
     	    if ($row_num) {
@@ -503,7 +538,6 @@ ENDLINE;
       		array_push($artists, $row['artist']);
 	      }
 	    }
-	  }
 	}
 	$string = id_string($artists);
 	if ($string[0]) {
@@ -691,7 +725,7 @@ ENDLINE;
       break;
     case 'id':
       $id = trim($_POST['id']);
-      print_results("select * from $table where id = $id");
+      print_results("select * from $table where id = '$id'");
       break;
     case 'title':
       $string = trim($_POST['submit']);

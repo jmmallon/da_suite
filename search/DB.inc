@@ -6,6 +6,7 @@ $user = "deliciou_jm";		# your Database name is the same as your account name.
 $host = "127.0.0.1";    # = "localhost", the server your are on.
 $pwd = "2cwhptqj9p7y";	# Your account password
 $table = "songlist";
+# $table = "songlist_test";
 
 $now = time();
 $day = 60 * 60 * 24;

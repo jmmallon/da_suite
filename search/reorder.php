@@ -14,7 +14,7 @@
     }
     list($idno, $tmp) = explode("-", $order[$i]);
     $list .= ",$idno";
-    $query_string = "select * from $table where id=$idno";
+    $query_string = "select * from $table where id='$idno'";
     $result_id = mysqli_query($mysql, $query_string);
     while ($row = mysqli_fetch_array($result_id, MYSQLI_ASSOC)) {
       $length = intval($row['length']/60) . ":" . sprintf("%02d",$row['length'] % 60);
